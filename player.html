@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/shaka-player/3.2.0/shaka-player.compiled.js"></script>
+    <style>
+        body {
+            background: #000;
+            margin: 0;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        video {
+            width: 100%;
+            height: auto;
+        }
+        #back-button {
+            margin: 20px;
+            background-color: #1e1e1e;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button id="back-button" onclick="window.location.href='index.html'">Indietro</button>
+    <video id="video" controls></video>
+    
+    <script>
+        const player = new shaka.Player(document.getElementById('video'));
+        const params = new URLSearchParams(window.location.search);
+        const channel = params.get('channel');
+
+        // Inserisci i tuoi URL e clearkey qui
+        const manifestUri = 'https://linear301-it-dash1-prd-akg0.cdn13.skycdp.com/016a/31023/FHD/skysportuno/master_stereo.mpd';
+        const clearkey = '0036dc70e4d659fe5ae57b52793a1ff3:55517f806b6be917c2bf0e9cf9acc44f';
+
+        async function initPlayer() {
+            // Configurazione della clearkey
+            player.configure({
+                drm: {
+                    clearKeys: {
+                        '0036dc70e4d659fe5ae57b52793a1ff3': '55517f806b6be917c2bf0e9cf9acc44f',
+                    }
+                }
+            });
+
+            // Caricamento del video
+            try {
+                await player.load(manifestUri);
+                console.log('Il video è stato caricato con successo!');
+            } catch (error) {
+                console.error('Errore nel caricamento del video:', error);
+            }
+        }
+
+        // Avvia il player
+        initPlayer();
+    </script>
+</body>
+</html>
